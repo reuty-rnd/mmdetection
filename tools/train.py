@@ -18,6 +18,7 @@ from mmdet.datasets import build_dataset
 from mmdet.models import build_detector
 from mmdet.utils import collect_env, get_root_logger
 
+from hackATR import show_filters
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a detector')
@@ -156,7 +157,10 @@ def main():
         cfg.model,
         train_cfg=cfg.get('train_cfg'),
         test_cfg=cfg.get('test_cfg'))
+
+    show_filters.show_filters(model)
     model.init_weights()
+    show_filters.show_filters(model,'_init')
 
     datasets = [build_dataset(cfg.data.train)]
     if len(cfg.workflow) == 2:
