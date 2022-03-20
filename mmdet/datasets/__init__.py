@@ -2,8 +2,9 @@
 from .builder import DATASETS, PIPELINES, build_dataloader, build_dataset
 from .cityscapes import CityscapesDataset
 from .coco import CocoDataset
-from .coco_panoptic import CocoPanopticDataset
 from .custom import CustomDataset
+from .coco_panoptic import CocoPanopticDataset
+from .kitti_tiny import  KittiTinyDataset
 from .dataset_wrappers import (ClassBalancedDataset, ConcatDataset,
                                MultiImageMixDataset, RepeatDataset)
 from .deepfashion import DeepFashionDataset
