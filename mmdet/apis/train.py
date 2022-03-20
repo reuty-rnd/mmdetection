@@ -196,6 +196,8 @@ def train_detector(model,
         runner.register_hook(
             eval_hook(val_dataloader, **eval_cfg), priority='LOW')
 
+    #runner.call_hook('before_run')
+
     if cfg.resume_from:
         runner.resume(cfg.resume_from)
     elif cfg.load_from:
