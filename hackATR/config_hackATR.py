@@ -238,13 +238,16 @@ log_config = dict(
         dict(type='TensorboardLoggerHook')
     ])
 
-custom_hooks = [dict(type='NumClassCheckHook')]
-
+custom_hooks = [dict(type='NumClassCheckHook'),dict(type='ShowObjectnessHook')]#dict(type='ShowFiltersHook')]
+custom_imports =  dict(
+    #imports=['hackATR.show_filters'],
+    imports=['hackATR.show_objectness'],
+    allow_failed_imports=False)
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
 load_from = './checkpoints/mask_rcnn_r50_caffe_fpn_mstrain-poly_3x_coco_bbox_mAP-0.408__segm_mAP-0.37_20200504_163245-42aa3d00.pth'
 resume_from = None
 workflow = [('train', 1)]
-work_dir = '/home/reuty/Data_m/experiments/mmdetection/tutorial_exps'
+work_dir = '/home/reuty/Data_m/experiments/mmdetection/hackATR'
 seed = 0
 gpu_ids = range(0, 1)

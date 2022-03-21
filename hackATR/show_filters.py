@@ -27,10 +27,7 @@ def show_filters(model,sfx=''):
     save_image(deep_l_w[:,0:3,:],'./hackATR_results/layer6{}.png'.format(sfx))
     save_image(deep_l_w.transpose(1,2),'./hackATR_results/layer6_transpose{}.png'.format(sfx))
     
-    # save_image(norm_weights(first_l_w),'layer1{}.png'.format(sfx))
-    # save_image(norm_weights(deep_l_w[:,0:3,:]),'layer6{}.png'.format(sfx))
-    # save_image(norm_weights(deep_l_w.transpose(1,2)),'layer6_transpose{}.png'.format(sfx))
-    
+   
 @HOOKS.register_module()
 class ShowFiltersHook(Hook):
 
@@ -60,10 +57,6 @@ class ShowFiltersHook(Hook):
         save_image(deep_l_w[:,0:3,:],'./hackATR_results/layer6{}.png'.format(sfx))
         save_image(deep_l_w.transpose(1,2),'./hackATR_results/layer6_transpose{}.png'.format(sfx))
         
-        # save_image(norm_weights(first_l_w),'layer1{}.png'.format(sfx))
-        # save_image(norm_weights(deep_l_w[:,0:3,:]),'layer6{}.png'.format(sfx))
-        # save_image(norm_weights(deep_l_w.transpose(1,2)),'layer6_transpose{}.png'.format(sfx))
-        
 
    
 
@@ -76,19 +69,3 @@ class ShowFiltersHook(Hook):
         model = runner.model
         self._show_filters(model,'after_init')
 
-
-# def before_train_epoch(self, runner):
-#     """Check whether the training dataset is compatible with head.
-
-#     Args:
-#         runner (obj:`EpochBasedRunner`): Epoch based Runner.
-#     """
-#     self._check_head(runner)
-
-# def before_val_epoch(self, runner):
-#     """Check whether the dataset in val epoch is compatible with head.
-
-#     Args:
-#         runner (obj:`EpochBasedRunner`): Epoch based Runner.
-#     """
-#     self._check_head(runner)
