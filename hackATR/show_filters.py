@@ -23,9 +23,9 @@ def show_filters(model,sfx=''):
     all_convs= all_convolutions_layer(model)
     first_l_w=all_convs[0].weight
     deep_l_w=all_convs[6].weight
-    save_image(first_l_w,'./hackATR_results/layer1{}.png'.format(sfx))
-    save_image(deep_l_w[:,0:3,:],'./hackATR_results/layer6{}.png'.format(sfx))
-    save_image(deep_l_w.transpose(1,2),'./hackATR_results/layer6_transpose{}.png'.format(sfx))
+    save_image(norm_weights(first_l_w),'./hackATR_results/layer1{}.png'.format(sfx))
+    save_image(norm_weights(deep_l_w[:,0:3,:]),'./hackATR_results/layer6{}.png'.format(sfx))
+    save_image(norm_weights(deep_l_w.transpose(1,2)),'./hackATR_results/layer6_transpose{}.png'.format(sfx))
     
    
 @HOOKS.register_module()

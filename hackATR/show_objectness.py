@@ -1,52 +1,41 @@
 import torch
-from mmcv.runner.hooks import HOOKS, Hook
-
-def all_convolutions_layer(model,convs=[]):
-    if type(model) ==torch.nn.modules.conv.Conv2d:
-        convs.append(model)
-    else:
-        try:
-            for child in model.children():
-                convs=all_convolutions_layer(child,convs)
-        except:
-            pass
-    return convs
-
-    
-@HOOKS.register_module()
-class ShowObjectnessHook(Hook):
+from matplotlib import pyplot as plt
+import cv2
 
 
-    def _all_convolutions_layer(self, model,convs=[]):
-        if type(model) ==torch.nn.modules.conv.Conv2d:
-            convs.append(model)
-        else:
-            try:
-                for child in model.children():
-                    convs=self._all_convolutions_layer(child,convs)
-            except:
-                pass
-        return convs
-
-   
-
-    def after_iter(self, runner):
-        model = runner.model
-        self._all_convolutions_layer(model)
+class SaveOutput:
+    def __init__(self):
+        self.outputs = []
+        
+    def __call__(self, module, module_in, module_out):
+        self.outputs.append(module_out)
+        
+    def clear(self):
+        self.outputs = []
 
 
-# def before_train_epoch(self, runner):
-#     """Check whether the training dataset is compatible with head.
+def show_objectnesses(img, featuremaps):
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # mmcv turns img into bgr
+    shape_img=(img.shape[1],img.shape[0])
 
-#     Args:
-#         runner (obj:`EpochBasedRunner`): Epoch based Runner.
-#     """
-#     self._check_head(runner)
+    for scale in range(0,5):
+        fig, axes = plt.subplots(2, 2, figsize= (16,9))
+        axes[0,0].imshow(img)
+        axes[0,0].set_title('Original image')
 
-# def before_val_epoch(self, runner):
-#     """Check whether the dataset in val epoch is compatible with head.
+        # axes[0,1].imshow(img, alpha=0.9)
+        featuremap = featuremaps[scale][0][0].cpu().numpy()
+        axes[0,1].imshow(cv2.resize(featuremap, shape_img), alpha=0.5)
+        axes[0,1].set_title('Scale: '+str(scale) + ', Anchor: 0')
 
-#     Args:
-#         runner (obj:`EpochBasedRunner`): Epoch based Runner.
-#     """
-#     self._check_head(runner)
+        # axes[1, 0].imshow(img, alpha=0.9)
+        featuremap = featuremaps[scale][0][1].cpu().numpy()
+        axes[1, 0].imshow(cv2.resize(featuremap, shape_img), alpha=0.5)
+        axes[1, 0].set_title('Scale: ' + str(scale) + ', Anchor: 1')
+
+        # axes[1,1].imshow(img, alpha=0.9)
+        featuremap = featuremaps[scale][0][2].cpu().numpy()
+        axes[1,1].imshow(cv2.resize(featuremap, shape_img), alpha=0.5)
+        axes[1,1].set_title('Scale: '+str(scale) + ', Anchor: 2')
+
+        plt.savefig('./hackATR_results/feature_results_of_scale_' + str(scale)+'.png', bbox_inches='tight')
